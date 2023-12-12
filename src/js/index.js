@@ -35,17 +35,18 @@ async function handleSubmit(evt) {
     gallery.innerHTML = '';
     currentPage = 1;
 
-    Notiflix.Loading.circle('Loading...');
-
+   
+    if (totalHits === 0 || searchQuery.trim() === '') {
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
+        return;
+    }
+     Notiflix.Loading.circle('Loading...');
     try {
         Notiflix.Loading.remove();
         const { totalHits, hits } = await getData(searchQuery, currentPage);
         maxPages = Math.ceil(totalHits / 40);
 
-        if (totalHits === 0 || searchQuery.trim() === '') {
-            Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
-            return;
-        }
+        
         gallery.insertAdjacentHTML('beforeend', createMarkup(hits))
         if (!firstSearch) {
             Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
