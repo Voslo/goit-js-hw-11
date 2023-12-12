@@ -35,17 +35,16 @@ async function handleSubmit(evt) {
     gallery.innerHTML = '';
     currentPage = 1;
 
-   
-    if (totalHits === 0 || searchQuery.trim() === '') {
+    if (searchQuery === '' || searchQuery.trim() === '') {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
-        return;
+        return; 
     }
-     Notiflix.Loading.circle('Loading...');
+
+    Notiflix.Loading.circle('Loading...');
     try {
         Notiflix.Loading.remove();
-        const { totalHits, hits } = await getData(searchQuery, currentPage);
+        const { totalHits, hits } = await getData(searchQuery.trim(), currentPage);
         maxPages = Math.ceil(totalHits / 40);
-
         
         gallery.insertAdjacentHTML('beforeend', createMarkup(hits))
         if (!firstSearch) {
